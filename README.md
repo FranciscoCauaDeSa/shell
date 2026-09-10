@@ -1,60 +1,39 @@
 # Go Shell Implementation
 
-A lightweight, POSIX-style shell implementation written in Go.
+A lightweight, POSIX-style shell implementation written in Go featuring command execution, argument parsing, and standard stream redirections.
 
 ---
 
 ## Features
 
 - **Interactive REPL**: Read-Eval-Print Loop that displays a prompt (`$ `), evaluates user input, and gracefully handles EOF (Ctrl+D).
+- **I/O Stream Redirection**:
+  - **Standard Output (stdout)**:
+    - Overwrite: `>` and `1>`
+    - Append: `>>` and `1>>`
+  - **Standard Error (stderr)**:
+    - Overwrite: `2>`
+    - Append: `2>>`
+  - Automatic stream restoration and safe file descriptor cleanup after execution.
 - **Builtin Commands**:
   - `exit [code]`: Terminates the shell session.
   - `echo [args...]`: Prints text and arguments to standard output.
   - `type [cmd]`: Distinguishes between shell builtins and executables located in `$PATH`.
   - `pwd`: Prints the current working directory.
   - `cd [dir]`: Changes directory with support for relative paths, absolute paths, and home directory expansion (`~`).
-- **External Program Execution**: Resolves external binaries through system `$PATH` (`exec.LookPath`) and executes them with arguments (`exec.Command`).
+- **External Program Execution**: Resolves external binaries through the system `$PATH` (`exec.LookPath`) and executes them with arguments (`exec.Command`).
 - **Command & Quote Parsing**:
-  - Handles single quotes (`'...'`) to preserve literal values.
-  - Handles double quotes (`"..."`) with escape sequence handling.
+  - Handles single quotes (`'...'`) to preserve literal character values.
+  - Handles double quotes (`"..."`) with escape sequence support.
   - Handles backslash escaping (`\`) for spaces and special characters.
 
 ---
 
-## Getting Started
+## Project Structure
 
-### Prerequisites
-
-- [Go](https://go.dev/dl/) installed (Go 1.22+ recommended).
-
-### Running the Shell Locally
-
-You can run the shell directly using `go run`:
-
-```bash
-go run main.go
-```
-
----
-
-## Example Usage
-
-```bash
-$ echo "Hello World"
-Hello World 
-
-$ type echo
-echo is a shell builtin
-
-$ type ls
-ls is /usr/bin/ls
-
-$ pwd
-/home/user/shell
-
-$ cd ~
-$ pwd
-/home/user
-
-$ exit
-```
+```text
+.
+├── builtin.go       # Implementation of shell built-in commands (cd, pwd, echo, type)
+├── main.go          # REPL loop, input parsing, command evaluation, and execution
+├── redirection.go  # File descriptor manipulation and stream redirection logic (stdout/stderr)
+└── README.md
